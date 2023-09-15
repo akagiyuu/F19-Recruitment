@@ -1,0 +1,65 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  deploy-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Create application.properties file
+        env:
+          APP_PROPERTIES_PATH: ./src/main/resources/application.properties
+        run: |
+          touch $APP_PROPERTIES_PATH
+          echo "${{ secrets.APP_PROPERTIES }}" >> $APP_PROPERTIES_PATH
+
+      - name: Build with Maven
+        run: mvn clean install
+
+      - name: Build & push Dockerfile image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: hdang09/k19-recruiment
+          tags: v1, latest
+          registry: docker.io
+          dockerfile: Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+
+  pull-image:
+    runs-on: self-hosted
+    needs: deploy-image
+
+    steps:
+      - name: Stop and Remove current container
+        run: |
+          sudo docker stop k19-recruiment || true
+          sudo docker rm k19-recruiment || true
+      - name: Pull latest image
+        run: sudo docker pull hdang09/k19-recruiment
+      - name: Start Docker image
+        run: sudo docker run --name k19-recruiment -d -p 8083:8080 hdang09/k19-recruiment
