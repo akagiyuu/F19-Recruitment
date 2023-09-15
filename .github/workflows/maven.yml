@@ -62,4 +62,4 @@ jobs:
       - name: Pull latest image
         run: sudo docker pull hdang09/k19-recruiment
       - name: Start Docker image
-        run: sudo docker run --name k19-recruiment -d -p 8083:8080 hdang09/k19-recruiment
+        run: sudo docker run --name k19-recruiment -d -p 8084:8080 hdang09/k19-recruiment
