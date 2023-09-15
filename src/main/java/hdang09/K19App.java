@@ -2,16 +2,18 @@ package hdang09;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @OpenAPIDefinition(
         info = @Info(
-                title = "K19 Recuitment API",
+                title = "F19 Recruitment API",
                 version = "1.0.0",
-                description = "An API for recuit K19."
-        )
+                description = "An API for recruiting F19 generation."
+        ),
+        servers = { @Server(url = "https://recruit.hdang09.site") }
 )
 public class K19App {
 
