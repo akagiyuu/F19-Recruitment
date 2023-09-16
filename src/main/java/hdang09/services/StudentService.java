@@ -86,12 +86,21 @@ public class StudentService {
         for (Student student : repo.findAll()) {
             students.add(student);
         }
+        
+        if (students.isEmpty()) {
+            return new Response(HttpStatus.OK, "The student list is empty!", students);
+        }
 
-        return new Response(HttpStatus.ACCEPTED, "Get student list successfully!",students);
+        return new Response(HttpStatus.OK, "Get student list successfully!", students);
     }
 
     public Response<Student> getStudentbyStudentId(String studentId) {
         Student student = repo.getByStudentId(studentId);
-        return new Response(HttpStatus.ACCEPTED, "Get data of student " + studentId + "successfully", student);
+        
+        if (student == null) {
+            return new Response(HttpStatus.NOT_FOUND, "Cannot find student with student ID " + studentId + "!");
+        }
+        
+        return new Response(HttpStatus.OK, "Get data of student with student ID " + studentId + "successfully", student);
     }
 }
