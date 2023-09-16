@@ -4,29 +4,38 @@
  */
 package hdang09.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 /**
  *
  * @author Admin
+ * @param <T>
  */
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Response<T> {
+public class Response<T> extends ResponseEntity<T> {
+
     private int code;
     private String message;
-    private T data;
+//    private T data;
 
-    public Response(int code, String message) {
-        this.code = code;
+    public Response(HttpStatus status, String message, T data) {
+        super(data, status);
+        this.code = status.value();
         this.message = message;
+//        this.data = data;
+    }
+
+    public Response(HttpStatus status, String message) {
+        super(status);
+        this.code = status.value();
+        this.message = message;
+//        this.data = null;
     }
 }
