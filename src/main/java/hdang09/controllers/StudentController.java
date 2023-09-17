@@ -24,16 +24,17 @@ public class StudentController {
     StudentService service = new StudentService();
 
     @PostMapping("/register")
-    public Response<Student> register(@RequestBody StudentDTO student) {
+    public ResponseEntity<Response<Student>> register(@RequestBody StudentDTO student) {
         return service.register(student);
     }
 
     @GetMapping("/all")
-    public Response<List<Student>> getAll() {
+    public ResponseEntity<List<Student>> getAll() {
         return service.getAll();
     }
+
     @GetMapping("/{studentId}")
-    public Response<Student> getUserResult(@PathVariable String studentId) {
-        return service.getStudentbyStudentId(studentId);
+    public ResponseEntity<Response<Student>> getByStudentId(@PathVariable String studentId) {
+        return service.getByStudentId(studentId);
     }
 }

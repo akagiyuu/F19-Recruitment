@@ -26,12 +26,13 @@ public class StudentService {
     @Autowired
     private StudentRepository repo;
 
-    public Response<Student> register(StudentDTO studentDTO) {
+    public ResponseEntity<Response<Student>> register(StudentDTO studentDTO) {
         Student student = new Student().fromStudentDTO(studentDTO);
 
         Student studentDb = repo.getByStudentId(student.getStudentId());
         if (studentDb != null) {
-            return new Response(HttpStatus.BAD_REQUEST, "This student ID has been used");
+            Response response = new Response(HttpStatus.BAD_REQUEST, "This student ID has been used");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         //        String userDbName = userDb.getName().toUpperCase();
@@ -42,65 +43,71 @@ public class StudentService {
         
         studentDb = repo.getByPersonalEmail(student.getPersonalEmail());
         if (studentDb != null) {
-            return new Response(HttpStatus.BAD_REQUEST, "This personal email has been used");
+            Response response = new Response(HttpStatus.BAD_REQUEST, "This personal email has been used");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         // Validate phone numbe is unique???
         
         if (student.getFirstName().length() > 100) {
-            return new Response(HttpStatus.BAD_REQUEST, "First name not larger than 100 characters");
+            Response response = new Response(HttpStatus.BAD_REQUEST, "First name not larger than 100 characters");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         if (student.getLastName().length() > 100) {
-            return new Response(HttpStatus.BAD_REQUEST, "Last name not larger than 100 characters");
+            Response response = new Response(HttpStatus.BAD_REQUEST, "Last name not larger than 100 characters");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         String studentIdRegex = "^(S|s|H|h|D|d)[E|e|A|a|S|s]+([0-9]{6})$";
         if (!student.getStudentId().matches(studentIdRegex)) {
-            return new Response(HttpStatus.BAD_REQUEST, "Student ID is not correct");
+            Response response = new Response(HttpStatus.BAD_REQUEST, "Student ID is not correct");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         String[] SEMESTERS = {"LUK1", "LUK2", "LUK3", "LUK4", "LUK5", "LUK6", "CN1", "CN2", "CN3"};
         String studentSemester = student.getSemester();
         if (!Arrays.asList(SEMESTERS).contains(studentSemester)) {
-            return new Response(HttpStatus.BAD_REQUEST, "Semester must in ['LUK1', 'LUK2', 'LUK3', 'LUK4', 'LUK5', 'LUK6', 'CN1', 'CN2', 'CN3']");
+            Response response = new Response(HttpStatus.BAD_REQUEST, "Semester must in ['LUK1', 'LUK2', 'LUK3', 'LUK4', 'LUK5', 'LUK6', 'CN1', 'CN2', 'CN3']");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         String mailRegex = "^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
         if (!student.getPersonalEmail().matches(mailRegex)) {
-            return new Response(HttpStatus.BAD_REQUEST, "Personal email is not correct");
+            Response response = new Response(HttpStatus.BAD_REQUEST, "Personal email is not correct");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         String phoneRegex = "^(0|\\+?84)(3|5|7|8|9)[0-9]{8}$";
         if (!student.getPhone().matches(phoneRegex)) {
-            return new Response(HttpStatus.BAD_REQUEST, "Not correct phone number. Phone region must be in Vietnam");
+            Response response = new Response(HttpStatus.BAD_REQUEST, "Not correct phone number. Phone region must be in Vietnam");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         student = repo.save(student);
-        return new Response(HttpStatus.CREATED, "Register successfully!", student);
+        Response response = new Response(HttpStatus.CREATED, "Register successfully!", student);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    public Response<List<Student>> getAll() {
+    public ResponseEntity<List<Student>> getAll() {
         List<Student> students = new ArrayList<>();
 
         for (Student student : repo.findAll()) {
             students.add(student);
         }
         
-        if (students.isEmpty()) {
-            return new Response(HttpStatus.OK, "The student list is empty!", students);
-        }
-
-        return new Response(HttpStatus.OK, "Get student list successfully!", students);
+        return ResponseEntity.status(HttpStatus.OK).body(students);
     }
 
-    public Response<Student> getStudentbyStudentId(String studentId) {
+    public ResponseEntity<Response<Student>> getByStudentId(String studentId) {
         Student student = repo.getByStudentId(studentId);
         
         if (student == null) {
-            return new Response(HttpStatus.NOT_FOUND, "Cannot find student with student ID " + studentId + "!");
+            Response response = new Response(HttpStatus.NOT_FOUND, "Cannot find student with student ID " + studentId + "!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
         
-        return new Response(HttpStatus.OK, "Get data of student with student ID " + studentId + "successfully", student);
+        Response response = new Response(HttpStatus.OK, "Get data of student with student ID " + studentId + " successfully", student);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

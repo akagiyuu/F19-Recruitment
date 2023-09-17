@@ -2,9 +2,10 @@ hdang09\services\SheetService.class
 hdang09\controllers\StudentController.class
 hdang09\controllers\SheetController.class
 hdang09\K19App.class
+hdang09\ServletInitializer.class
 hdang09\repositories\StudentRepository.class
 hdang09\entities\Response.class
 hdang09\dto\StudentDTO.class
 hdang09\entities\Student.class
+hdang09\exception\GlobalExceptionHandler.class
 hdang09\services\StudentService.class
-hdang09\ServletInitializer.class
