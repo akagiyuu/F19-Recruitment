@@ -13,8 +13,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
                 version = "1.0.0",
                 description = "An API for recruiting F19 generation."
         ),
-        servers = { @Server(url = "http://localhost:8080") }
-//        servers = { @Server(url = "https://recruit.hdang09.site") }
+//        servers = { @Server(url = "http://localhost:8080") }
+        servers = { @Server(url = "https://recruit.hdang09.site") }
 )
 public class K19App {
 
