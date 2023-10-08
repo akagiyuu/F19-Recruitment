@@ -4,8 +4,8 @@
  */
 package hdang09.services;
 
+import hdang09.constants.RegexConstants;
 import hdang09.dto.StudentDTO;
-import hdang09.entities.Response;
 import hdang09.entities.Student;
 import hdang09.repositories.StudentRepository;
 import java.util.ArrayList;
@@ -26,67 +26,29 @@ public class StudentService {
     @Autowired
     private StudentRepository repo;
 
-    public ResponseEntity<Response<Student>> register(StudentDTO studentDTO) {
+    public ResponseEntity<String> register(StudentDTO studentDTO) {
         Student student = new Student().fromStudentDTO(studentDTO);
 
         Student studentDb = repo.getByStudentId(student.getStudentId());
         if (studentDb != null) {
-            Response response = new Response(HttpStatus.BAD_REQUEST, "This student ID has been used");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This student ID has been used");
         }
-
-        //        String userDbName = userDb.getName().toUpperCase();
-        //        if (!userDbName.equals(name)) {
-        //            CustomResponse response = new CustomResponse(false, "Họ tên không trùng với MSSV đã đăng ký trước đó!");
-        //            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
-        //
         
         studentDb = repo.getByPersonalEmail(student.getPersonalEmail());
         if (studentDb != null) {
-            Response response = new Response(HttpStatus.BAD_REQUEST, "This personal email has been used");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This personal email has been used");
         }
 
-        // Validate phone numbe is unique???
-        
-        if (student.getFirstName().length() > 100) {
-            Response response = new Response(HttpStatus.BAD_REQUEST, "First name not larger than 100 characters");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-
-        if (student.getLastName().length() > 100) {
-            Response response = new Response(HttpStatus.BAD_REQUEST, "Last name not larger than 100 characters");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-
-        String studentIdRegex = "^(S|s|H|h|D|d)[E|e|A|a|S|s]+([0-9]{6})$";
-        if (!student.getStudentId().matches(studentIdRegex)) {
-            Response response = new Response(HttpStatus.BAD_REQUEST, "Student ID is not correct");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        // Validate phone number is unique???
 
         String[] SEMESTERS = {"LUK1", "LUK2", "LUK3", "LUK4", "LUK5", "LUK6", "CN1", "CN2", "CN3"};
         String studentSemester = student.getSemester();
         if (!Arrays.asList(SEMESTERS).contains(studentSemester)) {
-            Response response = new Response(HttpStatus.BAD_REQUEST, "Semester must in ['LUK1', 'LUK2', 'LUK3', 'LUK4', 'LUK5', 'LUK6', 'CN1', 'CN2', 'CN3']");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Semester must in ['LUK1', 'LUK2', 'LUK3', 'LUK4', 'LUK5', 'LUK6', 'CN1', 'CN2', 'CN3']");
         }
 
-        String mailRegex = "^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-        if (!student.getPersonalEmail().matches(mailRegex)) {
-            Response response = new Response(HttpStatus.BAD_REQUEST, "Personal email is not correct");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-
-        String phoneRegex = "^(0|\\+?84)(3|5|7|8|9)[0-9]{8}$";
-        if (!student.getPhone().matches(phoneRegex)) {
-            Response response = new Response(HttpStatus.BAD_REQUEST, "Not correct phone number. Phone region must be in Vietnam");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-
-        student = repo.save(student);
-        Response response = new Response(HttpStatus.CREATED, "Register successfully!", student);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        repo.save(student);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Registered successfully!");
     }
 
     public ResponseEntity<List<Student>> getAll() {
@@ -99,15 +61,17 @@ public class StudentService {
         return ResponseEntity.status(HttpStatus.OK).body(students);
     }
 
-    public ResponseEntity<Response<Student>> getByStudentId(String studentId) {
+    public ResponseEntity<?> getByStudentId(String studentId) {
+        if (!studentId.matches(RegexConstants.STUDENT_ID_REGEX)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid student ID format (Example correct format: SE191234)");
+        }
+
         Student student = repo.getByStudentId(studentId);
-        
+
         if (student == null) {
-            Response response = new Response(HttpStatus.NOT_FOUND, "Cannot find student with student ID " + studentId + "!");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot find student with student ID " + studentId + "!");
         }
         
-        Response response = new Response(HttpStatus.OK, "Get data of student with student ID " + studentId + " successfully", student);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(student);
     }
 }

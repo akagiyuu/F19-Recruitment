@@ -4,17 +4,35 @@
  */
 package hdang09.exception;
 
-import hdang09.entities.Response;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @ControllerAdvice
+@RestController
 public class GlobalExceptionHandler {
 
+    // Catch Validation Bean exception
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<String> handleValidationException(BindException ex) {
+        List<FieldError> fieldErrors = ex.getFieldErrors();
+
+        FieldError firstError = fieldErrors.get(0);
+        String errorMessage = firstError.getDefaultMessage();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    // Catch all exception
     @ExceptionHandler(Exception.class)
-    public Response handleException(Exception ex) {
-        return new Response(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+    public ResponseEntity<String> handleException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
 
     // Add more exception handling methods as needed for specific exceptions

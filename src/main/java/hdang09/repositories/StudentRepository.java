@@ -15,10 +15,7 @@ import org.springframework.data.repository.query.Param;
  */
 public interface StudentRepository extends CrudRepository<Student, Integer> {
 
-    @Query("SELECT s FROM Student s where s.studentId = :studentId")
-    Student getByStudentId(@Param("studentId") String studentId);
+    Student getByStudentId(String studentId);
     
-    @Query("SELECT s FROM Student s where s.personalEmail = :personalEmail")
-    Student getByPersonalEmail(@Param("personalEmail") String personalEmail);
-    
+    Student getByPersonalEmail(String personalEmail);
 }
