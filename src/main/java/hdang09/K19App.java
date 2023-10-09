@@ -11,10 +11,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         info = @Info(
                 title = "F19 Recruitment API",
                 version = "1.0.0",
-                description = "An API for recruiting F19 generation."
+                description = "An API for recruiting F19 generation in F-Code Club."
         ),
-//        servers = { @Server(url = "http://localhost:8080") }
-        servers = { @Server(url = "https://recruit.hdang09.site") }
+        servers = { @Server(url = "https://recruit.hdang09.site"), @Server(url = "http://localhost:8080") }
 )
 public class K19App {
 

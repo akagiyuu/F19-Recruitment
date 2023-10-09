@@ -8,7 +8,6 @@ import hdang09.constants.RegexConstants;
 import hdang09.dto.StudentDTO;
 import hdang09.entities.Student;
 import hdang09.repositories.StudentRepository;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,11 +51,7 @@ public class StudentService {
     }
 
     public ResponseEntity<List<Student>> getAll() {
-        List<Student> students = new ArrayList<>();
-
-        for (Student student : repo.findAll()) {
-            students.add(student);
-        }
+        List<Student> students = repo.getAllStudent();
         
         return ResponseEntity.status(HttpStatus.OK).body(students);
     }
@@ -67,7 +62,6 @@ public class StudentService {
         }
 
         Student student = repo.getByStudentId(studentId);
-
         if (student == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot find student with student ID " + studentId + "!");
         }

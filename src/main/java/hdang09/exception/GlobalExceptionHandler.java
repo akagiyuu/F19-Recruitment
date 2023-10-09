@@ -12,11 +12,18 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 
 @ControllerAdvice
 @RestController
 public class GlobalExceptionHandler {
+
+    // Catch export to sheet exception
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<String> handleIOException(IOException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 
     // Catch Validation Bean exception
     @ExceptionHandler(BindException.class)

@@ -7,7 +7,8 @@ package hdang09.repositories;
 import hdang09.entities.Student;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -18,4 +19,7 @@ public interface StudentRepository extends CrudRepository<Student, Integer> {
     Student getByStudentId(String studentId);
     
     Student getByPersonalEmail(String personalEmail);
+
+    @Query("SELECT s FROM Student s")
+    ArrayList<Student> getAllStudent();
 }
