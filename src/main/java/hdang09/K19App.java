@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
                 description = "An API for recruiting F19 generation in F-Code Club."
         ),
         servers = {
+                @Server(url = "https://recruit.f-code.tech"),
                 @Server(url = "https://recruit.hdang09.live"),
                 @Server(url = "https://recruit.hdang09.tech"),
                 @Server(url = "http://localhost:8080")
