@@ -40,10 +40,10 @@ public class StudentService {
 
         // Validate phone number is unique???
 
-        String[] SEMESTERS = {"LUK1", "LUK2", "LUK3", "TRS4", "TRS5", "TRS6", "CN1", "CN2", "CN3"};
+        String[] SEMESTERS = {"LUK1", "LUK2", "LUK3", "LUK4", "TRS4", "TRS5", "TRS6", "CN1", "CN2", "CN3"};
         String studentSemester = student.getSemester();
         if (!Arrays.asList(SEMESTERS).contains(studentSemester)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Semester must in ['LUK1', 'LUK2', 'LUK3', 'TRS4', 'TRS5', 'TRS6', 'CN1', 'CN2', 'CN3']");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Semester must in ['LUK1', 'LUK2', 'LUK3', 'LUK4', 'TRS4', 'TRS5', 'TRS6', 'CN1', 'CN2', 'CN3']");
         }
 
         repo.save(student);
