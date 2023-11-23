@@ -32,13 +32,18 @@ public class StudentService {
         if (studentDb != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This student ID has been used");
         }
-        
+
+        // Validate personal email is unique
         studentDb = repo.getByPersonalEmail(student.getPersonalEmail());
         if (studentDb != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This personal email has been used");
         }
 
-        // Validate phone number is unique???
+        // Validate phone number is unique
+        studentDb = repo.getByPhone(student.getPhone());
+        if (studentDb != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This phone number has been used");
+        }
 
         String[] SEMESTERS = {"LUK1", "LUK2", "LUK3", "LUK4", "TRS4", "TRS5", "TRS6", "CN1", "CN2", "CN3"};
         String studentSemester = student.getSemester();

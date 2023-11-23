@@ -20,6 +20,8 @@ public interface StudentRepository extends CrudRepository<Student, Integer> {
     
     Student getByPersonalEmail(String personalEmail);
 
+    Student getByPhone(String phone);
+
     @Query("SELECT s FROM Student s")
     ArrayList<Student> getAllStudent();
 }
