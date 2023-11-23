@@ -5,8 +5,6 @@
 package hdang09.controllers;
 
 import hdang09.services.SheetService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,15 +22,15 @@ import java.io.IOException;
 @RestController
 @CrossOrigin
 @RequestMapping("/sheet")
-@Tag(name = "Sheet")
+//@Tag(name = "Sheet")
 public class SheetController {
 
-    @Autowired
-    SheetService service = new SheetService();
+//    @Autowired
+//    SheetService service = new SheetService();
 
-    @GetMapping
-    @Operation(summary = "Export all account to a sheet")
-    public void exportSheet(HttpServletResponse response) throws IOException {
-        service.exportSheet(response);
-    }
+//    @GetMapping
+////    @Operation(summary = "Export all account to a sheet")
+//    public void exportSheet(HttpServletResponse response) throws IOException {
+//        service.exportSheet(response);
+//    }
 }
