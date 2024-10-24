@@ -1,4 +1,4 @@
-package hdang09.constants;
+package tech.fcode.recruitment.constants;
 
 public interface RegexConstants {
     String PHONE_NUMBER_REGEX = "^(0|\\+?84)[35789][0-9]{8}$";

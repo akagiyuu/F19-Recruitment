@@ -2,36 +2,31 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package hdang09.services;
-
-import hdang09.entities.Student;
-import hdang09.repositories.StudentRepository;
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletResponse;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+package tech.fcode.recruitment.services.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Service;
 
-/**
- * @author Admin
- */
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import tech.fcode.recruitment.entities.Student;
+import tech.fcode.recruitment.repositories.StudentRepository;
+import tech.fcode.recruitment.services.SheetService;
+
 @Service
-public class SheetService {
-
-    @Autowired
-    StudentRepository studentRepository;
+@RequiredArgsConstructor
+public class SheetServiceImpl implements SheetService{
+    private final StudentRepository studentRepository;
 
     public void exportSheet(HttpServletResponse response) throws IOException {
         ArrayList<Student> students = studentRepository.getAllStudent();
-
-        // Create a new workbook
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Students");
 
@@ -45,16 +40,10 @@ public class SheetService {
         headerRow.createCell(5).setCellValue("Semester");
         headerRow.createCell(6).setCellValue("Personal Email");
         headerRow.createCell(7).setCellValue("Phone");
-
-        // Populate data
         int rowNum = 1;
         populateData(students, sheet, rowNum);
-
-        // Set the response headers
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=[F-CODE]%20F19%20Accounts.xlsx");
-
-        // Write the workbook data to the response output stream
         ServletOutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);
         workbook.close();

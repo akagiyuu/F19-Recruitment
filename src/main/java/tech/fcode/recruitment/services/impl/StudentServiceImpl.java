@@ -2,28 +2,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package hdang09.services;
+package tech.fcode.recruitment.services.impl;
 
-import hdang09.constants.RegexConstants;
-import hdang09.dto.StudentDTO;
-import hdang09.entities.Student;
-import hdang09.repositories.StudentRepository;
 import java.util.Arrays;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author Admin
- */
-@Service
-public class StudentService {
+import lombok.RequiredArgsConstructor;
+import tech.fcode.recruitment.constants.RegexConstants;
+import tech.fcode.recruitment.dto.StudentDTO;
+import tech.fcode.recruitment.entities.Student;
+import tech.fcode.recruitment.repositories.StudentRepository;
+import tech.fcode.recruitment.services.StudentService;
 
-    @Autowired
-    private StudentRepository repo;
+
+@Service
+@RequiredArgsConstructor
+public class StudentServiceImpl implements StudentService {
+
+    private final StudentRepository repo;
 
     public ResponseEntity<String> register(StudentDTO studentDTO) {
         Student student = new Student().fromStudentDTO(studentDTO);
@@ -32,14 +32,10 @@ public class StudentService {
         if (studentDb != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This student ID has been used");
         }
-
-        // Validate personal email is unique
         studentDb = repo.getByPersonalEmail(student.getPersonalEmail());
         if (studentDb != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This personal email has been used");
         }
-
-        // Validate phone number is unique
         studentDb = repo.getByPhone(student.getPhone());
         if (studentDb != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This phone number has been used");

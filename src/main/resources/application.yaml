@@ -1,0 +1,18 @@
+spring:
+    application:
+      name: F-Code Recultment API
+    datasource:
+        url: jdbc:mysql://${DB_URL:localhost}:${DB_PORT:5432}/${DB_NAME}
+        username: ${DB_USERNAME}
+        password: ${DB_PASSWORD}
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+    sql:
+        init:
+            mode: always
+server:
+    servlet:
+        context-path: /api/v1
+    port: 8080
