@@ -5,26 +5,31 @@ services:
     build: .
     ports:
       - "8080:8080"
+    networks:
+      - f20-recruitment-networks
     depends_on:
-      - db
+      - postgres
     environment:
-      DB_URL: db
-      DB_PORT: 3306
+      DB_URL: postgres
+      DB_PORT: 5432
       DB_NAME: student
-      DB_USERNAME: root
-      DB_PASSWORD: admin
+      DB_USERNAME: postgres
+      DB_PASSWORD: AdminSupaSus123***
 
-  db:
-    image: mysql:latest
+  postgres:
+    image: postgres:14.12-bullseye
+    container_name: postgres-db_recrultment
     restart: always
+    networks:
+      - f20-recruitment-networks
     environment:
-      MYSQL_ROOT_PASSWORD: admin 
-      MYSQL_DATABASE: student
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      POSTGRES_PASSWORD: AdminSupaSus123***
+      POSTGRES_USER: postgres
+      POSTGRES_DB: student
 
 volumes:
  mysql_data:
+
+networks:
+  f20-recruitment-networks:
+   name: f20-recruitment-networks

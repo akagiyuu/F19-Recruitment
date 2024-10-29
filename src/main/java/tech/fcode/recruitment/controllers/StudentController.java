@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import tech.fcode.recruitment.dto.ResponseObject;
 import tech.fcode.recruitment.dto.StudentDTO;
 import tech.fcode.recruitment.services.StudentService;
 
@@ -17,7 +18,8 @@ import tech.fcode.recruitment.services.StudentService;
 public class StudentController {
     private final StudentService service;
     @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody StudentDTO student) {
-        return service.register(student);
+    public ResponseEntity<ResponseObject> register(@Valid @RequestBody StudentDTO student) {
+        ResponseObject response = service.register(student);
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 }
