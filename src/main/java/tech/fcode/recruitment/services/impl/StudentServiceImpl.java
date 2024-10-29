@@ -73,7 +73,7 @@ public class StudentServiceImpl implements StudentService {
         } catch (Exception ex) {
             return ResponseObject.builder()
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .success(false)
+            .success(true)
             .message(ex.getMessage())
             .build();
         }

@@ -25,7 +25,7 @@ public class Student {
     
     @Column(name = "last_name", nullable = false)
     private String lastName;
-    @Column(name = "major", nullable = false, unique = true)
+    @Column(name = "major", nullable = false)
     private String major;
     
     @Column(name = "student_id", nullable = false, unique = true)
