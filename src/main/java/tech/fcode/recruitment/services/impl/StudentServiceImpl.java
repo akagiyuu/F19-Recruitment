@@ -67,13 +67,13 @@ public class StudentServiceImpl implements StudentService {
             repo.save(student);
             return ResponseObject.builder()
             .status(HttpStatus.OK)
-            .success(false)
+            .success(true)
             .message("Registered successfully!")
             .build();
         } catch (Exception ex) {
             return ResponseObject.builder()
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .success(true)
+            .success(false)
             .message(ex.getMessage())
             .build();
         }
