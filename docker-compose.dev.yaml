@@ -5,31 +5,9 @@ services:
     build: .
     ports:
       - "8080:8080"
-    networks:
-      - f20-recruitment-networks
-    depends_on:
-      - postgres
     environment:
-      DB_URL: postgres
-      DB_PORT: 5432
-      DB_NAME: student
-      DB_USERNAME: postgres
-      DB_PASSWORD: AdminSupaSus123***
-
-  postgres:
-    image: postgres:14.12-bullseye
-    container_name: postgres-db_recrultment
-    restart: always
-    networks:
-      - f20-recruitment-networks
-    environment:
-      POSTGRES_PASSWORD: AdminSupaSus123***
-      POSTGRES_USER: postgres
-      POSTGRES_DB: student
-
-volumes:
- mysql_data:
-
-networks:
-  f20-recruitment-networks:
-   name: f20-recruitment-networks
+      DB_URL: ${DB_URL}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
